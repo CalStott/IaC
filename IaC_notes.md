@@ -11,6 +11,7 @@
 - **Scalability** - Easily spin up/down environments (e.g. staging, dev, production)
 - **Easy Duplication** - Exact same environment can be deployed on a different system and in a different location quickly
 - **Cost Efficiency** - Spin up resources only when needed, saving money in cloud environments
+- **Version Controlled** - Usually a file so can track changes via version control
 
 ## How does IaC work?
 
@@ -37,4 +38,40 @@ DevOps teams use IaC for many purposes:
 
 IaC provides a common language for both developers and operations. Changes can be reviewed in a transparent manner, which fosters better collaboration in a DevOps environment.
 
+## Where to start using IaC?
+
+If it takes 3 days to setup IaC code solution and only saves 5 mins every month, it isn't worth using.
+If it takes 1 day to setup IaC code solution but saves 30 mins every day, it is worth using.
+
+## What IaC tools are available?
+
+Some examples of tools:
+- Ansible
+- Terraform
+- AWS CloudFormation
+
+Breaks into two categories, **Configuration Management** and **Orchestration**.
+
+- **Configuration Management**
+  - Manages the state and settings of existing systems and software
+  - Ensures that servers and applications are correctly configured e.g. installing packages, managing config. files, setting up users
+  - *Handles the details inside the machine*
+  - e.g. Ansible
+  - e.g. installing Nginx on an app
+
+- **Orchestration**
+  - Automates the coordination and management of multiple systems or services
+  - Deals with provisioning, scaling, dependencies, service startup order and interconnections
+  - *Handles how machines and services work together as a system*
+  - e.g. Kubernetes, Terraform
+  - e.g. building an EC2 instance, VPC, SG
+
+> Analogy: Orchestration builds the house, Config. Management makes it liveable inside
+
+### Ansible
+
+- **Adhock** => 1-off commands
+- **Playbook** => "recipe" / desired state written in YAML
+
+- **Agentless** - do not need to install the software on each agent node, only on the master node. As long as the master node can communicate to the agents, it will run.
 
