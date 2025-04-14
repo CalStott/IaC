@@ -70,8 +70,16 @@ Breaks into two categories, **Configuration Management** and **Orchestration**.
 
 ### Ansible
 
-- **Adhock** => 1-off commands
-- **Playbook** => "recipe" / desired state written in YAML
+Ansible is an open-source IT automation tool that helps you manage and configure computers, servers, and other devices, often at scale. It allows you to automate tasks like:
+  - Installing software
+  - Configuring systems
+  - Deploying applications
+  - Managing network devices
 
+- **Ad hoc** => 1-off commands
+- **Playbook** => "recipe" / desired state written in YAML
 - **Agentless** - do not need to install the software on each agent node, only on the master node. As long as the master node can communicate to the agents, it will run.
 
+### How Ansible Works
+
+![How Ansible Works](./images/how-ansible-works.png)
