@@ -38,6 +38,9 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
    ansible --version  # Verify Ansible installation
    ```
 
+    - If the ansible installation has been successful, you will see a message like this in your terminal:  
+   ![Ansible Version](./images/ansible-version.png)
+
    > **Note:** You’ll need to press `Enter` for the repository command to work interactively. To automate this, consider using `yes "" | sudo apt-add-repository ...`.
 
 3. **Give controller SSH access to the target node:**
@@ -54,13 +57,21 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
    - Copy your private key file from your local machine to this file
    - Save and exit
 
-4. **Manually SSH into the target node from the controller to verify it works**
+4. **Change the permissions on your Private Key file**
+
+    ```bash
+    sudo chmod 400 private-key.pem # Allows only Read permissions for the owner
+    ```
+   
+5. **Manually SSH into the target node from the controller to verify it works**
 
    ```bash
    sudo ssh -i ~/.ssh/private-key.pem ubuntu@<target-node-ip>
    ```
 
-5. **Configure Ansible Hosts File:**
+   - Exit the Target Node once you have verified you can connect to it
+
+6. **Configure Ansible Hosts File:**
 
    ```bash
    sudo nano /etc/ansible/hosts
@@ -73,13 +84,16 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
      ec2-instance ansible_host=<placeholder-ip> ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/<placeholder-key-name>
      ```
 
-6. **Test connection with ping:**
+7. **Test connection with ping:**
 
    ```bash
    sudo ansible all -m ping
    ```
 
-7. **Optional: Suppress warning messages by editing config:**
+   - If it has been successful you will see this in your terminal:  
+      ![Ansible Success Ping](./images/ansible-ping-success.png)
+
+8. **Optional: Suppress warning messages by editing config:**
 
    ```bash
    sudo nano /etc/ansible/ansible.cfg
