@@ -1,0 +1,77 @@
+---
+- name: Deploying a NodeJS app
+  hosts: web
+  become: true
+
+  tasks:
+   # Run apt update
+   - name: Update all packages
+     ansible.builtin.apt:
+      update_cache: yes
+
+   # Run apt upgrade
+   - name: Upgrade all packages
+     ansible.builtin.apt:
+      upgrade: dist
+
+   # Install and run nginx
+   - name: Install and run nginx web server on target node
+     # Use package (pkg) "nginx", need "state=present" to make sure pkg is present and installed
+     apt: pkg=nginx state=present
+
+   # Install Node.js and npm
+   - name: Add NodeSource Node.js 20.x repo
+     ansible.builtin.shell: curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\sudo apt-get install -y nodejs
+
+   - name: Install Node.js
+     ansible.builtin.apt:
+       name: nodejs
+       state: present
+
+   - name: Verify Node.js installation
+     command: node -v
+     register: node_version
+
+   # Prints out the variable value instead of using ansible.builtin.debug
+   - debug:
+       msg: "Node.js version: {{ node_version.stdout }}"
+
+   # Install pm2
+   - name: Install PM2 globally
+     ansible.builtin.npm:
+      name: pm2
+      global: yes
+
+   - name: Check PM2 version
+     ansible.builtin.command: pm2 -v
+     register: pm2_version
+     changed_when: false
+
+   - debug:
+       msg: "PM2 version installed: {{ pm2_version.stdout }}"
+
+   # Clone the repository
+   - name: Cloning the app repository
+     ansible.builtin.git:
+      repo: https://github.com/CalStott/sparta-app.git
+      dest: /home/ubuntu/sparta-app
+
+   # Install app dependencies
+   - name: Install app dependencies
+     ansible.builtin.npm:
+      path: /home/ubuntu/sparta-app/app
+
+   # Run the app with pm2
+   - name: Start the app with pm2
+     ansible.builtin.shell: pm2 start app.js
+     args:
+      chdir: /home/ubuntu/sparta-app/app
+
+   # Set up the reverse proxy
+   - name: Editing the nginx config file
+     ansible.builtin.command: sed -i '51c\       proxy_pass http://localhost:3000;' /etc/nginx/sites-available/default
+
+   - name: Restarting nginx
+     ansible.builtin.service:
+       name: nginx
+       state: restarted
