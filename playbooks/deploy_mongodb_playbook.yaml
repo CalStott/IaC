@@ -1,0 +1,51 @@
+---
+- name: Deploy MongoDB instance
+  hosts: web
+  become: true
+  tasks:
+    - name: Import MongoDB public GPG key
+      ansible.builtin.shell: |
+        curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+        gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
+      args:
+        executable: /bin/bash
+        creates: /usr/share/keyrings/mongodb-server-7.0.gpg
+
+    - name: Create MongoDB source list
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/mongodb-org-7.0.list
+        content: |
+          deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse
+
+    - name: Update APT cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install MongoDB
+      ansible.builtin.apt:
+        name:
+          - mongodb-org=7.0.6
+          - mongodb-org-database=7.0.6
+          - mongodb-org-server=7.0.6
+          - mongodb-mongosh=2.1.5
+          - mongodb-org-mongos=7.0.6
+          - mongodb-org-tools=7.0.6
+        state: present
+
+    - name: Enable and start MongoDB service
+      ansible.builtin.service:
+        name: mongod
+        state: started
+        enabled: yes
+
+    - name: Configure MongoDB bind IP
+      ansible.builtin.lineinfile:
+        path: /etc/mongod.conf
+        regexp: '^  bindIp:'
+        line: '  bindIp: 0.0.0.0'
+        state: present
+
+    - name: Restart MongoDB to apply configuration changes
+      ansible.builtin.service:
+        name: mongod
+        state: restarted
