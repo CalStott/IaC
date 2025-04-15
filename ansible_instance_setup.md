@@ -27,6 +27,11 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
 ## Setting up Dependencies for Controller
 
 1. **SSH into the controller VM**
+
+    ```bash
+    sudo ssh -i ~/.ssh/private-key.pem ubuntu@<controller-ip>
+    ```
+
 2. **Run the following commands:**
 
    ```bash
@@ -103,7 +108,8 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
 
      ```ini
      [defaults]
-     interpreter_python = auto_silent
+     interpreter_python = auto_silent # Suppresses pink warning text for python interpreter
+     host_key_checking = False # Suppresses add to known host check when running ad hoc commands
      ```
 
 ---
@@ -149,3 +155,46 @@ sudo ansible web -m ansible.builtin.apt -a "update_cache=yes" --become
 # sudo apt upgrade using ansible
 sudo ansible web -m ansible.builtin.apt -a "upgrade=dist" --become
 ```
+
+## Copying the private key from Controller to Target Node using ad hoc commands
+
+- Run this command to copy the private key across to the target node:
+
+    ```bash
+    sudo ansible web -m ansible.builtin.copy -a "src=/home/ubuntu/.ssh/private-key.pem dest=/home/ubuntu/.ssh/private-key.pem"
+    ```
+
+- Verify the command has worked by SSH'ing into the target node and checking the file exists in the target location or using another ad hoc command:
+
+  - Manual:
+    ```bash
+    sudo ssh -i ~/.ssh/private-key.pem ubuntu@<target-node-ip> #SSH into the target node
+    cd .ssh/ # Change to the .ssh directory
+    ls # Look for the private key filename
+    ```
+  
+  - Ad hoc:
+    ```bash
+    sudo ansible web -a "ls ~/.ssh"
+    ```
+
+## Deploying Nginx using ad hoc commands
+
+- Run this command to install Nginx on the target node:
+
+    ```bash
+    # Install and update the nginx package using --become to run it as the superuser on the target node
+    sudo ansible web -m ansible.builtin.apt -a "name=nginx state=present update_cache=yes" --become
+    ```
+
+- Verify the installation by connecting to the Target Node via SSH
+
+    ```bash
+    sudo ssh -i ~/.ssh/private-key.pem ubuntu@<target-node-ip> #SSH into the target node
+    sudo systemctl status nginx # Check the status of nginx
+    ```
+
+  - If the installation was successful, you should see this output:  
+    ![Nginx Installation](./images/ansible-nginx-installation.png)
+
+- 
