@@ -1,0 +1,13 @@
+---
+- name: Run existing Node.js app with PM2
+  hosts: web
+  become: true
+  tasks:
+    - name: Install app dependencies
+      ansible.builtin.npm:
+        path: /home/ubuntu/sparta-app/app
+
+    - name: Start the app with PM2
+      ansible.builtin.shell: pm2 start app.js
+      args:
+        chdir: /home/ubuntu/sparta-app/app
