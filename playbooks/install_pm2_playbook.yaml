@@ -1,0 +1,17 @@
+---
+- name: Install PM2 globally using npm
+  hosts: web
+  become: yes
+  tasks:
+    - name: Install PM2 globally
+      ansible.builtin.npm:
+        name: pm2
+        global: yes
+
+    - name: Check PM2 version
+      ansible.builtin.command: pm2 -v
+      register: pm2_version
+      changed_when: false
+
+    - debug:
+        msg: "PM2 version installed: {{ pm2_version.stdout }}"
