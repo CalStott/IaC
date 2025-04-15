@@ -1,0 +1,8 @@
+---
+- name: Clone a Git repository play
+  hosts: web
+  tasks:
+   - name: Git clone
+     ansible.builtin.git:
+      repo: https://github.com/CalStott/sparta-app.git
+      dest: /home/ubuntu/sparta-app
