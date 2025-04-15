@@ -197,4 +197,16 @@ sudo ansible web -m ansible.builtin.apt -a "upgrade=dist" --become
   - If the installation was successful, you should see this output:  
     ![Nginx Installation](./images/ansible-nginx-installation.png)
 
-- 
+## Ansible Playbook Guide
+
+* Create .yaml playbook file `sudo nano playbook.yaml`
+  
+* Save the playbook file in `/etc/ansible`
+  
+* Syntax check the playbook `sudo ansible-playbook --syntax-check playbook.yaml`
+  
+* Check the playbook `sudo ansible --check playbook.yaml` - like a dry run of the playbook
+  
+* Run the playbook with `sudo ansible-playbook playbook.yaml`
+  
+* Add `--become` to the end of the run command if you need superuser access on the target node
