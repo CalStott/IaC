@@ -36,7 +36,7 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
 2. **Run the following commands:**
 
    ```bash
-   python3 --version  # Check Python is installed
+   python3 --version  # Check Python is installed - required for Ansible
    sudo apt update -y  # Update package list
    sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y  # Upgrade packages
    sudo DEBIAN_FRONTEND=noninteractive apt-add-repository ppa:ansible/ansible  # Add Ansible PPA
@@ -52,10 +52,6 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
 3. **Give controller SSH access to the target node:**
 
    ```bash
-   cd /etc/ansible
-   ls  # Verify files
-   cd ~
-   ls -a
    cd .ssh
    sudo nano private-key.pem  # Paste your private key here
    ```
@@ -87,7 +83,7 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
 
      ```ini
      [web]
-     ec2-instance ansible_host=<placeholder-ip> ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/<placeholder-key-name>
+     ec2-instance ansible_host=<target-node-ip> ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/<private-key-name>.pem
      ```
 
 7. **Test connection with ping:**
