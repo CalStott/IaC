@@ -1,6 +1,6 @@
 ---
 - name: Deploy MongoDB instance
-  hosts: web
+  hosts: db
   become: true
   tasks:
     - name: Import MongoDB public GPG key
