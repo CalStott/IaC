@@ -21,6 +21,7 @@ Setting up an Ansible controller and one target node (TN) – allowing the contr
 ## Target Node (TN) Instance
 
 - Create instance with the **same settings** as the controller
+  - Name e.g. `tech503-caleb-ansible-target-node`
 
 ---
 
