@@ -76,6 +76,7 @@ Ansible is an open-source IT automation tool that helps you manage and configure
   - Deploying applications
   - Managing network devices
 
+Some key features of Ansible are:
 - **Ad hoc** => 1-off commands
 - **Playbook** => "recipe" / desired state written in YAML
 - **Agentless** - do not need to install the software on each agent node, only on the master node. As long as the master node can communicate to the agents, it will run.
